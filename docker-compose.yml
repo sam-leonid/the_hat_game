@@ -1,0 +1,15 @@
+version: "3"
+services:
+  flask:
+    build: .
+    container_name: passwords
+    command: gunicorn -w 1 -b 0.0.0.0:5001 start:app --reload #--preload -b 0.0.0.0:5001 
+    environment:
+      - FLASK_APP=start.py
+      - FLASK_DEBUG=1
+      - PYTHONBUFFERED=True
+      - FLASK_ENV=production
+    ports:
+      - "5001:5001"
+    volumes:
+      - ./:/root
