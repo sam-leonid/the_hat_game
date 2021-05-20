@@ -16,4 +16,7 @@ This application predict password frequency (based on kaggle competition
 
 #### Follow the link [http://0.0.0.0:5001](http://0.0.0.0:5001) and show 
 
+### Деплой на heroku:
+[https://passwords-dmia.herokuapp.com](https://passwords-dmia.herokuapp.com)
+
 
