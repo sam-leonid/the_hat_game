@@ -3,7 +3,7 @@ services:
   flask:
     build: .
     container_name: passwords
-    command: gunicorn -w 1 -b 0.0.0.0:5001 start:app --reload #--preload -b 0.0.0.0:5001 
+    command: gunicorn -w 1 -b 0.0.0.0:5001 start:app --reload
     environment:
       - FLASK_APP=start.py
       - FLASK_DEBUG=1

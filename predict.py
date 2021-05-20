@@ -1,8 +1,6 @@
 import re
 import pickle
 import numpy as np
-from nltk.corpus import words
-from nltk.corpus import wordnet
 from catboost import CatBoostRegressor
 
 # вычисление расстояния между указанными символами
@@ -80,9 +78,8 @@ hor.update(new_h)
 
 
 def transform(passw):
-    setofwords = set(words.words())
     symb = set('[~!@#$%^&*()_+{}":;\']+$')
-    features = np.zeros(67)
+    features = np.zeros(63)
     
     # длина пароля
     features[0] = len(passw)
@@ -110,83 +107,77 @@ def transform(passw):
     reg = re.compile('[^a-zA-Z ]')
     clean_passw = passw.replace('\d+', '')
     clean_passw = reg.sub('', clean_passw).lower()
-    
-    # является ли словом
-    features[21] = 1 if wordnet.synsets(clean_passw) else 0
-    features[22] = 1 if clean_passw in setofwords else 0
-    features[23] = 1 if wordnet.synsets(clean_passw) else 0
-    features[24] = 1 if clean_passw in setofwords else 0
 
     # бинарные признаки по длине
-    features[25] = features[0] < 5
-    features[26] = features[0] < 10
-    features[27] = features[0] < 15
-    features[28] = features[0] >= 15
+    features[21] = features[0] < 5
+    features[22] = features[0] < 10
+    features[23] = features[0] < 15
+    features[24] = features[0] >= 15
     
     # относительная частота симоволов
-    features[29] = features[2]/features[0]
-    features[30] = features[1]/features[0]
-    features[31] = features[3]/features[0]
-    features[32] = features[6]/features[0]
-    features[33] = (features[1] + features[2])/features[0]
+    features[25] = features[2]/features[0]
+    features[26] = features[1]/features[0]
+    features[27] = features[3]/features[0]
+    features[28] = features[6]/features[0]
+    features[29] = (features[1] + features[2])/features[0]
 
     # совместное появление типов символов
-    features[34] = (features[2] > 0) & (features[3] > 0) \
+    features[30] = (features[2] > 0) & (features[3] > 0) \
            & (features[1] == 0) & (features[6] == 0)
-    features[35] = (features[2] == 0) & (features[3] == 0) \
+    features[31] = (features[2] == 0) & (features[3] == 0) \
            & (features[1] > 0) & (features[6] == 0)
-    features[36] = (features[2] > 0) & (features[3] == 0) \
+    features[32] = (features[2] > 0) & (features[3] == 0) \
            & (features[1] == 0) & (features[6] == 0)
-    features[37] = (features[2] > 0) & (features[3] == 0) \
+    features[33] = (features[2] > 0) & (features[3] == 0) \
            & (features[1] == 1) & (features[6] == 0)
-    features[38] = (features[2] > 0) & (features[1] > 0)
+    features[34] = (features[2] > 0) & (features[1] > 0)
 
     # количество уникальных символов
-    features[39] = len(set(passw))
+    features[35] = len(set(passw))
     
     # частые фразы
-    features[40] = 'pass' in passw
-    features[41] = 'qwerty' in passw
-    features[42] = 'qwe' in passw
-    features[43] = 'qaz' in passw
-    features[44] = '123' in passw
-    features[45] = '12345' in passw
-    features[46] = '321' in passw
-    features[47] = 'fuck' in passw
-    features[48] = 'abc' in passw
-    features[49] = '000' in passw
-    features[50] = '111' in passw
-    features[51] = '666' in passw
-    features[52] = '777' in passw
-    features[53] = 'love' in passw
+    features[36] = 'pass' in passw
+    features[37] = 'qwerty' in passw
+    features[38] = 'qwe' in passw
+    features[39] = 'qaz' in passw
+    features[40] = '123' in passw
+    features[41] = '12345' in passw
+    features[42] = '321' in passw
+    features[43] = 'fuck' in passw
+    features[44] = 'abc' in passw
+    features[45] = '000' in passw
+    features[46] = '111' in passw
+    features[47] = '666' in passw
+    features[48] = '777' in passw
+    features[49] = 'love' in passw
 
     # гласные согласные
-    features[54] = vowel(passw.lower(), True)
-    features[55] = vowel(passw.lower(), False)
-    features[56] = features[54]/features[0]
-    features[57] = features[55]/features[0]
+    features[50] = vowel(passw.lower(), True)
+    features[51] = vowel(passw.lower(), False)
+    features[52] = features[50]/features[0]
+    features[53] = features[51]/features[0]
     if (features[1] + features[2]) == 0:
-        features[58] = 0
-        features[59] = 0
+        features[54] = 0
+        features[55] = 0
     else:
-        features[58] = features[54]/(features[1] + features[2])
-        features[59] = features[55]/(features[1] + features[2])
+        features[54] = features[50]/(features[1] + features[2])
+        features[55] = features[51]/(features[1] + features[2])
     
     
     # количество уникальных букв, цифр, спецсимволов
     spec_symb = '!@#$%^&*()_+-=}{:;"><,./?|\~`'
-    features[60] = sum([1 if j.isdigit() else 0 for j in set(passw)])
-    features[61] = sum([1 if j.isalpha() else 0 for j in set(passw)])
-    features[62] = sum([1 if j in spec_symb else 0 for j in set(passw)])
+    features[56] = sum([1 if j.isdigit() else 0 for j in set(passw)])
+    features[57] = sum([1 if j.isalpha() else 0 for j in set(passw)])
+    features[58] = sum([1 if j in spec_symb else 0 for j in set(passw)])
     
     # количество букв, относительная частота, первая буква
-    features[63] = features[1] + features[2]
-    features[64] = features[63]/features[0]
-    features[65] = passw[0].isalpha()
+    features[59] = features[1] + features[2]
+    features[60] = features[59]/features[0]
+    features[61] = passw[0].isalpha()
     
     # текст и после него цифры
     regex = re.compile('^[a-zA-Z]+[\d]{1,4}$')
-    features[66]= 1 if regex.match(passw) else 0
+    features[62]= 1 if regex.match(passw) else 0
 
     where_are_NaNs = np.isnan(features)
     features[where_are_NaNs] = 0

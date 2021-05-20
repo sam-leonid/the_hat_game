@@ -27,8 +27,9 @@ def submit():
     try:
         if request.method == 'POST':
             password = request.form['password']
-            # print(password)
-            model = pickle.load(open('model.pkl', 'rb'))
+            if password =='':
+                abort(400)
+            model = pickle.load(open('model', 'rb'))
             prediction = predict.predict(password, model)
             img = 'static/'
             if prediction > 50:
