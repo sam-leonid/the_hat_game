@@ -1,6 +1,6 @@
 build:
     docker:
-      web: Dockerfile.app
+      web: Dockerfile
   run:
     web: gunicorn start:app --timeout 60 --log-level debug
   
