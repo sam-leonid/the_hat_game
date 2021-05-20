@@ -1,1 +1,1 @@
-web: gunicorn -w 1 -b 0.0.0.0:5001 start:app --reload
+web: gunicorn start:app --timeout 60 --log-level debug
