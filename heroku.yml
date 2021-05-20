@@ -2,5 +2,5 @@ build:
     docker:
       web: dockerfile
 run:
-web: gunicorn start:app --timeout 60 --log-level debug
+    web: gunicorn start:app --timeout 60 --log-level debug
   
