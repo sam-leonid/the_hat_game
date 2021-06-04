@@ -1,17 +1,19 @@
 [[source]]
+name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
-name = "pypi"
-
-[packages]
-sklearn = "*"
-catboost = "==0.24.2"
-flask-wtf = "*"
-flask = "*"
-gunicorn = "*"
-numpy = "*"
 
 [dev-packages]
+pytest = "*"
+
+[packages]
+numpy = "*"
+pandas = "*"
+fasttext = "*"
+scikit-learn = "*"
+Flask = "*"
+gunicorn = "*"
+flask-wtf = "*"
 
 [requires]
-python_version = "3.6"
+python_version = "3.8"

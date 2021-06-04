@@ -2,12 +2,11 @@ version: "3"
 services:
   flask:
     build: .
-    container_name: passwords
-    command: gunicorn -w 1 -b 0.0.0.0:5001 start:app --reload
+    container_name: hat
+    command: gunicorn -w 1 -b 0.0.0.0:5001 app:app --reload
     environment:
       - FLASK_ENV=production
     ports:
       - "5001:5001"
     volumes:
-      - ./:/root
-      
+      - ./:/app
